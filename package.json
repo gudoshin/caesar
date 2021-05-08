@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "minimist": "^1.2.5"
+  },
+  "name": "task1",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gudoshin/task1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gudoshin/task1/issues"
+  },
+  "homepage": "https://github.com/gudoshin/task1#readme"
+}
