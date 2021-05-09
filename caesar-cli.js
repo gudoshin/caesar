@@ -7,13 +7,6 @@ const path = require('path');
 const caesar = require('./caesar');
 const { Transform } = require('stream');
 
-function myParseInt(value) {
-    const parsedValue = parseInt(value, 10);
-    if (isNaN(parsedValue)) {
-      throw new commander.InvalidOptionArgumentError('Not a number.');
-    }
-    return parsedValue;
-  }
 program
   .requiredOption('-s, --shift <number>', 'shift', )
   .option('-i, --input <path>', 'input file')
