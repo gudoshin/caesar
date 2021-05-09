@@ -4,6 +4,8 @@ const fs = require('fs');
 const { Command } = require('commander');
 const program = new Command();
 const path = require('path');
+const caesar = require('./caesar');
+const { Transform } = require('stream');
 
 function myParseInt(value) {
     const parsedValue = parseInt(value, 10);
@@ -19,12 +21,11 @@ program
   .requiredOption('-a, --action <type>', 'action')
   .action((options) => {
     try {
-        const shift = parseInt(options.shift, 10);
+        let shift = parseInt(options.shift, 10);
         if (isNaN(shift)) throw new Error('Сдвиг должен быть числом');
         const action = options.action;
         if (action !== "encode" && action !== "decode") throw new Error('action должен быть encode или decode');
-        console.log(shift);
-        console.log(action);
+        if (action === "decode") shift *= -1;
         let readable = process.stdin;
         let writeable = process.stdout;
         if (options.input) {
@@ -37,13 +38,22 @@ program
             if(!fs.existsSync(outpath)) throw new Error('не правильно указан путь к output файлу');
             writeable = fs.createWriteStream(outpath);
         }
+        const tsStream = new Transform({
+            transform(chunk, enc, cb) {
+              try {
+                  const resultString = caesar(chunk.toString('utf8'), shift);
+                  cb(null, resultString);
+              } catch (error) {
+                  cb(error);
+              }
+            }
+          })
         readable.setEncoding('utf8');
-        readable.pipe(writeable);
+        readable.pipe(tsStream).pipe(writeable);
     } catch (error) {
         process.stderr.write(error.message);
         process.exit();
-    }
-    
+    }    
   });
 
 program.parse();
