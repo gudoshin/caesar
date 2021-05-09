@@ -1,19 +1,18 @@
 "use strict";
 
 const fs = require('fs');
-const { Command } = require('commander');
+const { Command, option } = require('commander');
 const program = new Command();
 const path = require('path');
-const caesar = require('./caesar');
-const { Transform } = require('stream');
-
+const tsStream = require('./tsStream');
 program
-  .requiredOption('-s, --shift <number>', 'shift', )
+  .option('-s, --shift <number>', 'shift', )
   .option('-i, --input <path>', 'input file')
   .option('-o, --output <path>', 'output file')
-  .requiredOption('-a, --action <type>', 'action')
+  .option('-a, --action <type>', 'action')
   .action((options) => {
     try {
+        if (!options.shift || !options.action) throw new Error('Не указан обязательный параметр');
         let shift = parseInt(options.shift, 10);
         if (isNaN(shift)) throw new Error('Сдвиг должен быть числом');
         const action = options.action;
@@ -31,21 +30,11 @@ program
             if(!fs.existsSync(outpath)) throw new Error('не правильно указан путь к output файлу');
             writeable = fs.createWriteStream(outpath);
         }
-        const tsStream = new Transform({
-            transform(chunk, enc, cb) {
-              try {
-                  const resultString = caesar(chunk.toString('utf8'), shift);
-                  cb(null, resultString);
-              } catch (error) {
-                  cb(error);
-              }
-            }
-          })
         readable.setEncoding('utf8');
-        readable.pipe(tsStream).pipe(writeable);
+        readable.pipe(tsStream(shift)).pipe(writeable);
     } catch (error) {
         process.stderr.write(error.message);
-        process.exit();
+        process.exit(2);
     }    
   });
 
