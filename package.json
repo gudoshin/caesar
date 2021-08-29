@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "commander": "^7.2.0",
+    "minimist": "^1.2.5"
+  },
+  "name": "caesar-cli",
+  "description": "",
+  "version": "1.0.0",
+  "main": "caesar-cli.js",
+  "scripts": {
+    "caesar-cli": "node caesar-cli.js" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gudoshin/task1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gudoshin/task1/issues"
+  },
+  "homepage": "https://github.com/gudoshin/task1#readme"
+}
